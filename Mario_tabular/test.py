@@ -3,7 +3,6 @@ from SMB_RAMWRAPPER import SMBRamWrapper
 import gym_super_mario_bros
 from nes_py.wrappers import JoypadSpace
 import numpy as np
-from record_video import RecordVideo
 import gymnasium.utils.save_video as sv
 import time
 
