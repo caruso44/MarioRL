@@ -46,4 +46,24 @@ Com relação a recompensa (R), foram utilizadas os seguinte critérios:
 - d = 0 se vivo e d = -15 se morto
 - R = v + c + d
 
-  Além disso foi criado uma função para penalisar o mário caso ele pule em momentos dencessários, como quando não há obstáculos, precipicios ou inimigos.
+Além disso foi criado uma função para penalisar o mário caso ele pule em momentos dencessários, como quando não há obstáculos, precipicios ou inimigos.
+
+# DDQL
+
+O deep q-learning, utiliza o mesmo principio do tabular de explorar e exploitar, porém ao invés de armazenar a informação em uma tabela Q(s,a), ele cria uma rede neural que dado um estado S, retorna um vetor que representa a tendencia que o agente possui de escolher cada uma das possíveis ações. Assim com a rede treinada, bastaria passar a imagem que representa o estado pela rede e em seguida escolher a ação com o maior resultado. Assim será necessário treinar a rede.
+
+O double deep q-learning segue esse principio, porém ele utiliza duas redes neurais, uma para determinar o valor estimado para a saida da rede, e a outra para definir o target para então ser realizado o backpropagation.
+Outra caracteristica consiste em armazenar as utlimas iterações em buffer para que possa ser amostrado um bacth que será utilizado para treinar a rede. O objetivo disso é permitir que o agente utilize mais de uma vez a interação para poder tomar suas decisões, visto que em um jogo com muitos estados, a repetição acaba sendo raro.
+
+A classe principal do código consiste na classe Mario,a qual possui as seguintes funções
+
+- Act: Selecionar a ação
+- cache: Armazenar os estados
+- recall: Amostrar o batch de estados
+- td_estimate: Definir o valor estimado
+- td_target: Definir o valor target
+- save: Salvar chekpoint
+- learn: Backpropagation, para a rede aprender
+- update_q_online: Atualizar o valor da rede
+- sync_q_target: Sincronizar as duas redes
+
