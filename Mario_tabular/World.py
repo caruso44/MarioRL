@@ -18,33 +18,40 @@ class World:
 
     def update_eps(self, episode):
         self.episolon = max(0.1, self.episolon - episode * self.episilon_rate)
+
+    # achar a posição do mário
     def find_mario(self, state):
         mask = (state == 2)
         if len(np.argwhere(mask)) == 0:
             return mask
         return np.argwhere(mask)[0]
 
+    # Procurar as coordenadas dos inimigos
     def find_enemy(self, state):
         mask = (state == -1)
         return np.argwhere(mask)
 
-
+    # verificar se o mario esta no chão
     def check_ground(self, state):
         mario_pos = self.find_mario(state)
         return (state[mario_pos[0] + 1, mario_pos[1], 0] == 1)
 
+    # verificar se há um obstáculo a frente
     def obstacle_ahead(self, state):
         mario_pos = self.find_mario(state)
         return state[mario_pos[0] - 2: mario_pos[0] + 1, mario_pos[1] + 1, 0]
     
+    # Verificar se há um obstáculo proximo
     def obstacle_near(self, state):
         mario_pos = self.find_mario(state)
         return state[mario_pos[0] - 2: mario_pos[0] + 1, mario_pos[1] + 2, 0]
 
+    # verificar se o mario consegue pular
     def can_jump(self, state):
         mario_pos = self.find_mario(state)
         return (state[mario_pos[0] - 1, mario_pos[1], 0] != 1) and (state[mario_pos[0] - 2,mario_pos[1],0] != 1)
 
+    # verificar se há um inimigo perto
     def enemy_near(self, state):
         mario_pos = self.find_mario(state)
         enemies = self.find_enemy(state)
@@ -57,12 +64,14 @@ class World:
             max_dist = max(max_dist, dist)
         return max_dist <= 2
     
+    # verificar se ele acertou um inimigo por cima
     def enemy_bellow(self, state):
         mario_pos = self.find_mario(state)
         if state[mario_pos[0] + 1, mario_pos[1], 0] == -1:
             return True
         return False
 
+    # verificar se possui um inimigo a média distância
     def enemy_mid(self, state):
         mario_pos = self.find_mario(state)
         enemies = self.find_enemy(state)
@@ -75,6 +84,7 @@ class World:
             max_dist = max(max_dist, dist)
         return max_dist <= 3
 
+    # Verificar se há um inimigo distante
     def enemy_far(self, state):
         mario_pos = self.find_mario(state)
         enemies = self.find_enemy(state)
@@ -87,6 +97,7 @@ class World:
             max_dist = max(max_dist, dist)
         return max_dist <= 4
 
+    # Verificar se há colisão
     def colision(self, state):
         mario_pos = self.find_mario(state)
         enemies = self.find_enemy(state)

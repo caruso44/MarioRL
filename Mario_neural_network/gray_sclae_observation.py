@@ -17,6 +17,7 @@ class GrayScaleObservation(gym.ObservationWrapper):
         observation = torch.tensor(observation.copy(), dtype=torch.float)
         return observation
 
+    # Converter de RGB apra grayscale
     def observation(self, observation):
         observation = self.permute_orientation(observation)
         transform = T.Grayscale()

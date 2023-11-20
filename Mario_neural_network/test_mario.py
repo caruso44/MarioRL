@@ -16,7 +16,7 @@ import time
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-# Initialize Super Mario environment (in v0.26 change render mode to 'human' to see results on the screen)
+
 if gym.__version__ < '0.26':
     env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0")
 else:
@@ -28,7 +28,7 @@ env.reset()
 next_state, reward, done, trunc, info = env.step(action=0)
 print(f"{next_state.shape},\n {reward},\n {done},\n {info}")
 
-# Apply Wrappers to environment
+# Aplicar Wrappers para o environment
 env = SkipFrame(env, skip=4)
 env = GrayScaleObservation(env)
 env = ResizeObservation(env, shape=84)
@@ -51,17 +51,15 @@ done = False
 
 while not done:
 
-    # Run agent on the state
+
     state = state[0].__array__() if isinstance(state, tuple) else state.__array__()
     state = torch.tensor(state, device=device).unsqueeze(0)
     action_values = net(state, model="online")
     action = torch.argmax(action_values, axis=1).item()
 
-    # Agent performs action
     next_state, reward, done, trunc, info = env.step(action)
     env.render()
 
-    # Update state
     state = next_state
     time.sleep(0.01)
 

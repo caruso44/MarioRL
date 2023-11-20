@@ -8,9 +8,6 @@ from World import World
 from tqdm import tqdm
 
 def load_smb_env(name='SuperMarioBros-1-1-v0', crop_dim=[0,16,0,13], n_stack=2, n_skip=4):
-    '''
-    Wrapper function for loading and processing smb env
-    '''
     env = gym_super_mario_bros.make(name)
     env = JoypadSpace(env, [["right"], ["right", "A"]])
     env_wrap = SMBRamWrapper(env, crop_dim, n_stack=n_stack, n_skip=n_skip)
@@ -21,7 +18,7 @@ def load_smb_env(name='SuperMarioBros-1-1-v0', crop_dim=[0,16,0,13], n_stack=2, 
 
 env = gym_super_mario_bros.make('SuperMarioBros-1-1-v1')
 env = JoypadSpace(env, [["right"], ["right", "A"]])
-# Setup cropping size
+
 x0 = 0
 x1 = 16
 y0 = 0
@@ -45,14 +42,17 @@ with tqdm(total= Episodes) as pbar:
         total_reward = 0
         max_pos = 0
         while(not done):
+            # pular o estado caso o mario não esteja na imagem. Situações que ocorrem quando ele morre
             if len(np.argwhere(world.find_mario(state))) == 0 or world.find_mario(state).shape[0] > 3:
                 break
             action = world.select_action(state)
             new_state, reward, done, info = env_wrap.step(action)
             env.render()
+            # pular o estado caso o mario não esteja na imagem. Situações que ocorrem quando ele morre
             if len(np.argwhere(world.find_mario(new_state))) == 0 or world.find_mario(new_state).shape[0] > 3:
                 break
             reward = world.adjust_reward(state, reward, action)
+            # Matar o mario quando ele ficar preso em algum lugar
             if repeat_pos[info['x_pos']] > 300:
                 reward -= 15
                 done = True

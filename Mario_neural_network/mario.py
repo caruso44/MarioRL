@@ -36,7 +36,7 @@ class Mario:
         if np.random.rand() < self.exploration_rate:
             action_idx = np.random.randint(self.action_dim)
 
-        # xploitar
+        # exploitar
         else:
             state = state[0].__array__() if isinstance(state, tuple) else state.__array__()
             state = torch.tensor(state, device=self.device).unsqueeze(0)
@@ -95,6 +95,7 @@ class Mario:
         self.optimizer.step()
         return loss.item()
 
+    # sincronizar ambas as redes
     def sync_Q_target(self):
         self.net.target.load_state_dict(self.net.online.state_dict())
     
