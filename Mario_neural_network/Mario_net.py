@@ -25,10 +25,10 @@ class MarioNet(nn.Module):
             nn.ReLU(),
             nn.Linear(512, output_dim),
         )
-
+        #contução da segunda rede que será usada como target
         self.target = copy.deepcopy(self.online)
 
-        # Q_target parameters are frozen.
+        # Os parametros do q_target são congelados
         for p in self.target.parameters():
             p.requires_grad = False
 

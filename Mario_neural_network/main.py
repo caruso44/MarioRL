@@ -14,22 +14,22 @@ from MetricLogger import MetricLogger
 
 
 
-# Initialize Super Mario environment (in v0.26 change render mode to 'human' to see results on the screen)
+
 if gym.__version__ < '0.26':
     env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0", new_step_api=True)
 else:
     env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0", render_mode='rgb_array', apply_api_compatibility=True)
 
-# Limit the action-space to
-#   0. walk right
-#   1. jump right
+# Limitar o espaço de ação
+#   0. andar para direita
+#   1. pular para direita
 env = JoypadSpace(env, [["right"], ["right", "A"]])
 
 env.reset()
 next_state, reward, done, trunc, info = env.step(action=0)
 print(f"{next_state.shape},\n {reward},\n {done},\n {info}")
 
-# Apply Wrappers to environment
+# Aplicar Wrappers para o environment
 env = SkipFrame(env, skip=4)
 env = GrayScaleObservation(env)
 env = ResizeObservation(env, shape=84)
@@ -54,28 +54,27 @@ with tqdm(total= episodes) as pbar:
 
         state = env.reset()
 
-        # Play the game!
         while True:
 
-            # Run agent on the state
+            #agente escolhe a ação
             action = mario.act(state)
 
-            # Agent performs action
+            # Agente performa a ação
             next_state, reward, done, trunc, info = env.step(action)
 
-            # Remember
+            # armazena a tupla com (estado, proximo estado, ação, recompensa)
             mario.cache(state, next_state, action, reward, done)
 
-            # Learn
+            # Aprende
             q, loss = mario.learn()
 
             # Logging
             logger.log_step(reward, loss, q)
 
-            # Update state
+            # Update no estado
             state = next_state
 
-            # Check if end of game
+            # checa se o jogo acabou
             if done or info["flag_get"]:
                 break
         logger.log_episode()
