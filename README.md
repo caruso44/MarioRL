@@ -48,6 +48,14 @@ Com relação a recompensa (R), foram utilizadas os seguinte critérios:
 
 Além disso foi criado uma função para penalisar o mário caso ele pule em momentos dencessários, como quando não há obstáculos, precipicios ou inimigos.
 
+O codigo foi realizado em 10000 épocas por aproximadamente 10 horas, e foi encontrado o seguinte resultado
+
+https://github.com/caruso44/MarioRL/assets/91800368/c46f0982-6f4a-4e9b-b69c-fc0a59e9d9f8
+
+
+Veja que o mario, não realiza pulos desnecessários, sabendo a hora exata de quando saltar sobre o inimigo. Todavia ele não consegue pular sobre o cano, o que pode indicar que são necessários utilizar mais de um frame no mesmo estado, o que será realizado em futuras implementações
+
+
 # DDQL
 
 O deep q-learning, utiliza o mesmo principio do tabular de explorar e exploitar, porém ao invés de armazenar a informação em uma tabela Q(s,a), ele cria uma rede neural que dado um estado S, retorna um vetor que representa a tendencia que o agente possui de escolher cada uma das possíveis ações. Assim com a rede treinada, bastaria passar a imagem que representa o estado pela rede e em seguida escolher a ação com o maior resultado. Assim será necessário treinar a rede.
@@ -66,4 +74,14 @@ A classe principal do código consiste na classe Mario,a qual possui as seguinte
 - learn: Backpropagation, para a rede aprender
 - update_q_online: Atualizar o valor da rede
 - sync_q_target: Sincronizar as duas redes
+
+
+Com relação a esse algoritmo foi realizado um treinamento em 10000 épocas também e o resultado encontrado foi o seguinte
+
+
+
+https://github.com/caruso44/MarioRL/assets/91800368/b9de406d-4008-4e25-8b6c-543373a2906a
+
+
+Veja que ele alcansa uma distância maior que o método tabular, mesmo usando a imagem sem tratamento, o que indica que esse método é mais robusto. Para melhorar seu rendimento em trabalhos futuros será utilizado o mesmo algoritmo mas tendo como input o vetor de bits.
 
