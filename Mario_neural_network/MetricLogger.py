@@ -17,22 +17,18 @@ class MetricLogger:
         self.ep_avg_losses_plot = save_dir / "loss_plot.jpg"
         self.ep_avg_qs_plot = save_dir / "q_plot.jpg"
 
-        # History metrics
         self.ep_rewards = []
         self.ep_lengths = []
         self.ep_avg_losses = []
         self.ep_avg_qs = []
 
-        # Moving averages, added for every call to record()
         self.moving_avg_ep_rewards = []
         self.moving_avg_ep_lengths = []
         self.moving_avg_ep_avg_losses = []
         self.moving_avg_ep_avg_qs = []
 
-        # Current episode metric
         self.init_episode()
 
-        # Timing
         self.record_time = time.time()
 
     def log_step(self, reward, loss, q):
