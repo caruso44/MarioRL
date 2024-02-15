@@ -30,9 +30,11 @@ class World:
 
     def check_ground(self, state):
         mario_pos = self.find_mario(state)
+        if(len(mario_pos) != 2):
+            mario_pos = np.array((0,0))
         if mario_pos[0] + 1 == 13:
             return False
-        return (state[mario_pos[0] + 1, mario_pos[1]] == 1)
+        return (state[min(mario_pos[0] + 1, 12), mario_pos[1]] == 1)
 
     def obstacle_ahead(self, state):
         mario_pos = self.find_mario(state)
@@ -60,7 +62,7 @@ class World:
 
     def enemy_bellow(self, state):
         mario_pos = self.find_mario(state)
-        if state[mario_pos[0] + 1, mario_pos[1]] == -1:
+        if state[min(mario_pos[0] + 1,12), mario_pos[1]] == -1:
             return True
         return False
 
@@ -109,6 +111,16 @@ class World:
         obstacle = self.obstacle_ahead(state)
         enemy_bellow = self.enemy_bellow(state)
         obstacle_near = self.obstacle_near(state)
+        if(len(obstacle_near) < 3):
+            obstacle_near = obstacle_near.tolist()
+            for i in range(len(obstacle_near), 3):
+                obstacle_near.append(0)
+            obstacle_near = np.array(obstacle_near)
+        if(len(obstacle) < 3):
+            obstacle = obstacle.tolist()
+            for i in range(len(obstacle), 3):
+                obstacle.append(0)
+            obstacle = np.array(obstacle)
         return tuple([ground, jump, collision, near, mid, far, obstacle[0], obstacle[1], obstacle[2], enemy_bellow,
                        obstacle_near[0], obstacle_near[1], obstacle_near[2]])
 

@@ -18,11 +18,11 @@ class Test:
         self.y1 = 13
         self.n_stack = 4
         self.n_skip = 4
-        env = gym_super_mario_bros.make('SuperMarioBros-1-1-v1')
+        env = gym_super_mario_bros.make('SuperMarioBros-1-2-v1')
         env = JoypadSpace(env, [["right"], ["right", "A"]])
         self.env_wrap = SMBRamWrapper(env, [self.x0, self.x1, self.y0, self.y1], n_stack=self.n_stack, n_skip=self.n_skip)
         self.world = World(env)
-        checkpoint = torch.load('checkpoints\mario_net_1.chkpt')
+        checkpoint = torch.load('checkpoints\mario_net_2.chkpt')
         net = MarioNet(52, 2).float()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         net = net.to(device=self.device)
